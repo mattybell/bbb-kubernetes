@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: logging
+  name: kibana
+  labels:
+    component: kibana
+spec:
+  selector:
+    component: kibana
+  ports:
+  - name: http
+    port: 5601
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    namespace: logging
+    name: kibana
+    annotations:
+        kubernetes.io/ingress.class: traefik
+spec:
+    rules:
+      - host: kibana.192.168.23.74.nip.io
+        http:
+            paths:
+                - path: /
+                  backend:
+                      serviceName: kibana
+                      servicePort: http
+
